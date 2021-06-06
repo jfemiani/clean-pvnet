@@ -19,9 +19,10 @@ ffibuilder.set_source(
     #include "src/ext.h"
     """,
     extra_objects=['src/uncertainty_pnp.cpp.o',
-                   ceres_library,
-                   glog_library],
-    libraries=['stdc++']
+                   #ceres_library,
+                   #glog_libraryi
+                   ],
+    libraries=['stdc++', 'ceres', 'glog']
 )
 
 

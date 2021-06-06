@@ -54,6 +54,7 @@ Another way is to use the following commands.
     sudo apt-get install libgoogle-glog-dev
     sudo apt-get install libsuitesparse-dev
     sudo apt-get install libatlas-base-dev
+    sudo apt-get install libceres-dev
     python setup.py build_ext --inplace
     ```
 3. Set up datasets:

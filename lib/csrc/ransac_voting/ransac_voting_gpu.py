@@ -33,7 +33,7 @@ def ransac_voting_layer(mask, vertex, round_hyp_num, inlier_thresh=0.999, confid
 
         coords = torch.nonzero(cur_mask).float()  # [tn,2]
         coords = coords[:, [1, 0]]
-        direct = vertex[bi].masked_select(torch.unsqueeze(torch.unsqueeze(cur_mask, 2), 3))  # [tn,vn,2]
+        direct = vertex[bi].masked_select(torch.unsqueeze(torch.unsqueeze(cur_mask>0, 2), 3))  # [tn,vn,2]
         direct = direct.view([coords.shape[0], vn, 2])
         tn = coords.shape[0]
         idxs = torch.zeros([round_hyp_num, vn, 2], dtype=torch.int32, device=mask.device).random_(0, direct.shape[0])
@@ -139,7 +139,7 @@ def ransac_voting_layer_v3(mask, vertex, round_hyp_num, inlier_thresh=0.999, con
 
         coords = torch.nonzero(cur_mask).float()  # [tn,2]
         coords = coords[:, [1, 0]]
-        direct = vertex[bi].masked_select(torch.unsqueeze(torch.unsqueeze(cur_mask, 2), 3))  # [tn,vn,2]
+        direct = vertex[bi].masked_select(torch.unsqueeze(torch.unsqueeze(cur_mask>0, 2), 3))  # [tn,vn,2]
         direct = direct.view([coords.shape[0], vn, 2])
         tn = coords.shape[0]
         idxs = torch.zeros([round_hyp_num, vn, 2], dtype=torch.int32, device=mask.device).random_(0, direct.shape[0])
@@ -224,7 +224,7 @@ def estimate_voting_distribution_with_mean(mask, vertex, mean, round_hyp_num=256
 
         coords = torch.nonzero(cur_mask).float()  # [tn,2]
         coords = coords[:, [1, 0]]
-        direct = vertex[bi].masked_select(torch.unsqueeze(torch.unsqueeze(cur_mask, 2), 3))  # [tn,vn,2]
+        direct = vertex[bi].masked_select(torch.unsqueeze(torch.unsqueeze(cur_mask>0, 2), 3))  # [tn,vn,2]
         direct = direct.view([coords.shape[0], vn, 2])
         tn = coords.shape[0]
 
