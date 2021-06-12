@@ -4,7 +4,7 @@ from torch import nn
 import numpy as np
 import torch.nn.functional
 from collections import OrderedDict
-
+import time
 
 def sigmoid(x):
     y = torch.clamp(x.sigmoid(), min=1e-4, max=1 - 1e-4)
@@ -279,8 +279,10 @@ def load_model(net, optim, scheduler, recorder, model_dir, resume=True, epoch=-1
     print('Load model: {}'.format(os.path.join(model_dir, '{}.pth'.format(pth))))
     pretrained_model = torch.load(os.path.join(model_dir, '{}.pth'.format(pth)))
     net.load_state_dict(pretrained_model['net'])
-    optim.load_state_dict(pretrained_model['optim'])
-    scheduler.load_state_dict(pretrained_model['scheduler'])
+    if optim is not None:
+        optim.load_state_dict(pretrained_model['optim'])
+    if scheduler is not None:
+        scheduler.load_state_dict(pretrained_model['scheduler'])
     recorder.load_state_dict(pretrained_model['recorder'])
     return pretrained_model['epoch'] + 1
 
@@ -317,7 +319,9 @@ def load_network(net, model_dir, resume=True, epoch=-1, strict=True):
     else:
         pth = epoch
     print('Load model: {}'.format(os.path.join(model_dir, '{}.pth'.format(pth))))
+    tstart = time.perf_counter()
     pretrained_model = torch.load(os.path.join(model_dir, '{}.pth'.format(pth)))
+    print(f"   ==> Loaded model in {time.perf_counter()-tstart} secs")
     net.load_state_dict(pretrained_model['net'], strict=strict)
 
     return pretrained_model['epoch'] + 1

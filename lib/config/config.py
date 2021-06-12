@@ -15,7 +15,11 @@ cfg.kpt_model = ''
 cfg.network = 'dla_34'
 
 # network heads
-cfg.heads = ''
+cfg.heads = CN()
+cfg.heads.vote_dim = 18
+cfg.heads.seg_dim = 2
+cfg.heads.ct_hm = 30
+cfg.heads.wh = 2
 
 # task
 cfg.task = ''
@@ -93,7 +97,7 @@ cfg.result_dir = 'data/result'
 cfg.skip_eval = False
 
 # dataset
-cfg.cls_type = 'cat'
+cfg.cls_type = 'glue'   # 'glue' and 'eggbox' are symmtric -- 'cat' is not. 
 
 # tless
 cfg.tless = CN()
@@ -120,7 +124,10 @@ def parse_cfg(cfg, args):
     os.environ['CUDA_VISIBLE_DEVICES'] = ', '.join([str(gpu) for gpu in cfg.gpus])
 
     if cfg.task in _heads_factory:
-        cfg.heads = _heads_factory[cfg.task]
+        default_heads = _heads_factory[cfg.task]
+        if isinstance(cfg.heads, CN):
+            default_heads.update(cfg.heads)
+        cfg.heads = default_heads
 
     if 'Tless' in cfg.test.dataset and cfg.task == 'pvnet':
         cfg.cls_type = '{:02}'.format(int(cfg.cls_type))

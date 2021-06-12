@@ -1,7 +1,7 @@
 from lib.config import cfg, args
 import numpy as np
 import os
-
+import time
 
 def run_rgb():
     import glob
@@ -70,6 +70,7 @@ def run_evaluate():
     load_network(network, cfg.model_dir, epoch=cfg.test.epoch)
     network.eval()
 
+
     data_loader = make_data_loader(cfg, is_train=False)
     evaluator = make_evaluator(cfg)
     for batch in tqdm.tqdm(data_loader):
@@ -99,7 +100,9 @@ def run_visualize():
             if k != 'meta':
                 batch[k] = batch[k].cuda()
         with torch.no_grad():
+            # tstart = time.perf_counter()
             output = network(batch['inp'], batch)
+            # print(f"Predicted in {time.perf_counter()-tstart} secs")
         visualizer.visualize(output, batch)
 
 

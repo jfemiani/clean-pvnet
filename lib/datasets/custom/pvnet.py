@@ -47,6 +47,7 @@ class Dataset(data.Dataset):
         else:
             inp = img
 
+
         if self._transforms is not None:
             inp, kpt_2d, mask = self._transforms(inp, kpt_2d, mask)
 
@@ -61,7 +62,7 @@ class Dataset(data.Dataset):
 
     def augment(self, img, mask, kpt_2d, height, width):
         # add one column to kpt_2d for convenience to calculate
-        hcoords = np.concatenate((kpt_2d, np.ones((9, 1))), axis=-1)
+        hcoords = np.concatenate((kpt_2d, np.ones((len(kpt_2d), 1))), axis=-1)
         img = np.asarray(img).astype(np.uint8)
         foreground = np.sum(mask)
         # randomly mask out to add occlusion

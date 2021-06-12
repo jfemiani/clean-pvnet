@@ -1,0 +1,29 @@
+# wait
+model: 'custom'
+model_dir: 'data/model'
+network: 'res'
+heads: 
+    vote_dim: 30  # Set this to three times the number of keypoints!
+task: 'pvnet'
+gpus: (0, 1)
+resume: true
+cls_type: glue # Symmetri
+
+train:
+    optim: 'adam'
+    lr: 1e-3
+    epoch: 6000
+    milestones: (20, 40, 60, 80) #, 100, 120, 160, 180, 200, 220)
+    gamma: 0.9 # 0.5
+    batch_size: 32
+    dataset: 'CustomTrain'
+    cropresize_rate: 1.0
+    rotate_rate: 1.0
+    rotate_min: -30
+    rotate_max: 30
+    weight_decay: 0.
+    batch_sampler: 'image_size'
+test:
+    dataset: 'CustomTest'
+    batch_size: 1
+    batch_sampler: 'image_size'
