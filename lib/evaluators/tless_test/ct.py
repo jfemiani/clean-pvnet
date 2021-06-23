@@ -10,7 +10,7 @@ from .coco_eval import COCOeval
 
 
 class Evaluator:
-    def __init__(self, result_dir):
+    def __init__(self, result_dir, **kwargs):
         self.results = []
         self.img_ids = []
         self.aps = []

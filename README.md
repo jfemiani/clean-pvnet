@@ -228,12 +228,16 @@ An example dataset can be downloaded at [here](https://zjueducn-my.sharepoint.co
     ```
 2. Create a soft link pointing to the dataset:
     ```
-    ln -s /path/to/custom_dataset data/custom
+    ln -s /path/to/custom_dataset data/custom/{cls_type}
     ```
+    where {cls_type} is the name of the custom object (e.g. 'cat')
+
 3. Process the dataset:
     ```
     python run.py --type custom
     ```
+    > NOTE: All you need to do is make sure that train.json and val.json files exist
+
 4. Train:
     ```
     python train_net.py --cfg_file configs/custom.yaml train.batch_size 4

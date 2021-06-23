@@ -72,16 +72,25 @@ class DatasetCatalog(object):
             'ann_file': 'data/YCB/posedb/{}_val.pkl'.format(cfg.cls_type),
             'data_root': 'data/YCB'
         },
-	'CustomTrain': {
+	    'CustomTrain': {
             'id': 'custom',
-            'data_root': 'data/custom',
-            'ann_file': 'data/custom/train.json',
+            'data_root':  f'data/custom/{cfg.cls_type}',
+            'ann_file': f'data/custom/{cfg.cls_type}/train.json',
             'split': 'train'
         },
         'CustomTest': {
             'id': 'custom',
-            'data_root': 'data/custom',
-            'ann_file': 'data/custom/train.json',
+            'data_root': f'data/custom/{cfg.cls_type}',
+            'ann_file': f'data/custom/{cfg.cls_type}/val.json',
+            # 'ann_file': f'data/custom/{cfg.cls_type}/train.json',
+            'split': 'test'
+        },
+        'CustomTest.LowRes': {
+            'id': 'custom',
+            'data_root': f'data/custom/{cfg.cls_type}',
+            'ann_file': f'data/custom/{cfg.cls_type}/val.json',
+            # 'ann_file': f'data/custom/{cfg.cls_type}/train.json',
+            'downsample': 8,
             'split': 'test'
         }
     }

@@ -1,13 +1,18 @@
 # wait
-model: 'custom'
-model_dir: 'data/model'
-network: 'res'
+model: 'AIM-9-TRAILS'  # Name this after the Object --> It will be the folder name where weights are saved
+model_dir: 'data/model' # Weights are saved/loaded from {model_dir}/{model}/{epoch-number}.pth
+network: 'res'   # ResNet18 with modifications for dense prediction
 heads: 
-    vote_dim: 30  # Set this to three times the number of keypoints!
+    vote_dim: 30  # Set this to 2 (K + 1)  + 2 where K is the number of keypoints (excluding center)
+
 task: 'pvnet'
 gpus: (0, 1)
 resume: true
-cls_type: glue # Symmetri
+cls_type: AIM-9-SIDEWINDER-TRAILS 
+symmetric: True
+
+#transfer: 'data/model'  # WIP
+symmetry: (1, 1, 4)  # WIP
 
 train:
     optim: 'adam'
@@ -27,3 +32,4 @@ test:
     dataset: 'CustomTest'
     batch_size: 1
     batch_sampler: 'image_size'
+

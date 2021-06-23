@@ -26,7 +26,7 @@ import tqdm
 
 class Evaluator:
 
-    def __init__(self, result_dir):
+    def __init__(self, result_dir, **kwargs):
         self.result_dir = result_dir
         args = DatasetCatalog.get(cfg.test.dataset)
         self.ann_file = args['ann_file']

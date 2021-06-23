@@ -22,7 +22,7 @@ from lib.csrc.nn import nn_utils
 
 class Evaluator:
 
-    def __init__(self, result_dir):
+    def __init__(self, result_dir, **kwargs):
         self.result_dir = os.path.join(result_dir, cfg.test.dataset)
         os.system('mkdir -p {}'.format(self.result_dir))
 

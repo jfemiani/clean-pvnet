@@ -49,7 +49,7 @@ ENV PATH $PATH:/opt/conda/envs/env/bin:/opt/conda/bin
 
 # installing PVnet dependencies (and removing pvnet again)
 RUN cd /opt && \
-    git clone https://github.com/zju3dv/clean-pvnet.git pvnet && \
+    git clone https://github.com/femianjc/clean-pvnet.git pvnet && \
     cd pvnet && \
     conda init bash && \
     conda create -n pvnet python=3.7 && \

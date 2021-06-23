@@ -79,6 +79,8 @@ cfg.test.icp = False
 cfg.test.un_pnp = False
 cfg.test.vsd = False
 cfg.test.det_gt = False
+cfg.test.projection_threshold = 5
+cfg.test.change_contrast = 1.0
 
 cfg.test.batch_sampler = ''
 
@@ -97,7 +99,31 @@ cfg.result_dir = 'data/result'
 cfg.skip_eval = False
 
 # dataset
-cfg.cls_type = 'glue'   # 'glue' and 'eggbox' are symmtric -- 'cat' is not. 
+cfg.cls_type = 'glue'   # 'glue' and 'eggbox' are symmtric -- 'cat' is not. \
+cfg.symmetric = False
+cfg.symmetry = (1,1,1)
+
+cfg.visualize = CN()
+cfg.visualize.mask = False  # Render the mask over the input
+cfg.visualize.mask_alpha = 1  # Opacity of the mask
+cfg.visualize.keypoints = False  # Show gt and target keypoints
+cfg.visualize.pose = True  # Show bounding boxes
+cfg.visualize.vectors = False  # Show quivers for the vectors
+cfg.visualize.vectors_spacing = 3  # Integer gap between quivers for the vectors
+cfg.visualize.angles = False  # show angles as hue
+cfg.visualize.points = False  # show many samples of ray-intersection (vote) points
+cfg.visualize.show = True  # Show the plot for each one
+cfg.visualize.save = True
+cfg.visualize.folder = './vis'  # Save plots to this folder
+
+cfg.custom = CN()
+cfg.custom.test = CN()
+cfg.custom.test.data_root = 'data/custom'
+cfg.custom.test.ann_file = 'data/custom/val.json'
+
+cfg.custom.train = CN()
+cfg.custom.train.data_root = 'data/custom'
+cfg.custom.train.ann_file = 'data/custom/train.json'
 
 # tless
 cfg.tless = CN()

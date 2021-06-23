@@ -11,6 +11,7 @@ if cfg.test.icp:
 from PIL import Image
 from lib.utils.img_utils import read_depth
 from scipy import spatial
+from transforms3d.euler import mat2euler
 
 
 class Evaluator:
@@ -22,10 +23,13 @@ class Evaluator:
         self.coco = coco.COCO(self.ann_file)
 
         data_root = args['data_root']
-        model_path = 'data/custom/model.ply'
-        self.model = pvnet_data_utils.get_ply_model(model_path)
-        self.diameter = np.loadtxt('data/custom/diameter.txt').item()
 
+        model_path = os.path.join(data_root, 'model.ply')
+        self.model = pvnet_data_utils.get_ply_model(model_path)
+
+        self.diameter = np.loadtxt(os.path.join(data_root, 'diameter.txt')).item()
+
+        self.euler = []
         self.proj2d = []
         self.add = []
         self.icp_add = []
@@ -33,7 +37,29 @@ class Evaluator:
         self.mask_ap = []
         self.icp_render = icp_utils.SynRenderer(cfg.cls_type) if cfg.test.icp else None
 
-    def projection_2d(self, pose_pred, pose_targets, K, threshold=5):
+    def euler_error(self, pose_pred, pose_targets, sym=(1,1,1)):
+        # this SHOULD be szxz for proper Euler angles
+        # We will use a rotating frame so that symmetry is easier to hanfle
+        pose_pred = pose_pred[:3,:3]
+        pose_targets = pose_targets[:3,:3]
+
+        # axes = 'rxyx'  - This should be right for symmetry but it is not intuitive to understand
+        axes = 'szxz'
+        assert sym[0] == 1 and sym[1] == 1, "Right now we only handle Z-symmetry...."
+        pred_xyz = np.degrees(mat2euler(pose_pred, axes))
+        targ_xyz = np.degrees(mat2euler(pose_targets, axes))
+        error_xyz = targ_xyz - pred_xyz
+
+        #   ( [(order*error + 180) % 360-180]) /order
+        for i in range(3):
+            error_xyz[i] = ((sym[i] * error_xyz[i] + 180) % 360 - 180) / sym[i]
+
+        # Measure the difference
+        errors = np.abs(error_xyz)
+        self.euler.append(errors)
+
+
+    def projection_2d(self, pose_pred, pose_targets, K, threshold=cfg.test.projection_threshold):
         model_2d_pred = pvnet_pose_utils.project(self.model, K, pose_pred)
         model_2d_targets = pvnet_pose_utils.project(self.model, K, pose_targets)
         proj_mean_diff = np.mean(np.linalg.norm(model_2d_pred - model_2d_targets, axis=-1))
@@ -98,10 +124,12 @@ class Evaluator:
             pose_pred_icp = self.icp_refine(pose_pred.copy(), anno, output, K)
             self.add_metric(pose_pred_icp, pose_gt, icp=True)
         self.projection_2d(pose_pred, pose_gt, K)
-        if cfg.cls_type in ['eggbox', 'glue']:
+        if cfg.symmetric:
             self.add_metric(pose_pred, pose_gt, syn=True)
         else:
             self.add_metric(pose_pred, pose_gt)
+
+        self.euler_error(pose_pred, pose_gt, cfg.symmetry)
         self.cm_degree_5_metric(pose_pred, pose_gt)
         self.mask_iou(output, batch)
 
@@ -110,15 +138,25 @@ class Evaluator:
         add = np.mean(self.add)
         cmd5 = np.mean(self.cmd5)
         ap = np.mean(self.mask_ap)
+        
+        euler = np.array(self.euler)
+        euler_rmse = np.sqrt(np.mean(euler**2, axis=0))
+        euler_one_degree = np.mean(euler<1, axis=0)
+        euler_five_degree = np.mean(euler<5, axis=0)
         print('2d projections metric: {}'.format(proj2d))
         print('ADD metric: {}'.format(add))
         print('5 cm 5 degree metric: {}'.format(cmd5))
         print('mask ap70: {}'.format(ap))
         if self.icp_render is not None:
             print('ADD metric after icp: {}'.format(np.mean(self.icp_add)))
+        print("euler:")
+        for (i, ax) in enumerate('xyz'):
+            print(f" => r{ax}:  mse={euler_rmse[i]:5.2}, 1deg={euler_one_degree[i]:5.2%}, 5deg={euler_five_degree[i]:5.2%}")
+       
         self.proj2d = []
         self.add = []
         self.cmd5 = []
         self.mask_ap = []
         self.icp_add = []
+        self.euler = []
         return {'proj2d': proj2d, 'add': add, 'cmd5': cmd5, 'ap': ap}
