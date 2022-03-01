@@ -1,0 +1,34 @@
+name: pvnet
+channels:
+  - defaults
+dependencies:
+  - python=3.7
+  - ipython
+  - cython
+  - scipy
+  - matplotlib
+  - transforms3d
+  - scikit-image
+  - lmdb
+  - setuptools
+  - cffi
+  - easydict
+  - plyfile
+  - yacs
+  - opencv
+  - tqdm
+  - pycocotools
+  - scikit-learn
+  - pyopengl
+  - ipdb
+  - progressbar
+  - tensorboardx
+  - torchvision
+  - cudatoolkit~=10.1
+  - cudatoolkit-dev~=10.1
+  - pytorch
+  - ipykernel
+  - autopep8
+  - black
+  - yapf
+prefix: /home/femianjc/anaconda3/envs/pvnet
