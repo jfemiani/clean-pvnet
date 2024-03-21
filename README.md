@@ -40,13 +40,15 @@ Another way is to use the following commands.
     ROOT=/path/to/clean-pvnet
     cd $ROOT/lib/csrc
     export CUDA_HOME="/usr/local/cuda-9.0"
-    cd dcn_v2
-    python setup.py build_ext --inplace
-    cd ../ransac_voting
+    cd ransac_voting
     python setup.py build_ext --inplace
     cd ../nn
     python setup.py build_ext --inplace
     cd ../fps
+    python setup.py build_ext --inplace
+    
+    # If you want to run PVNet with a detector
+    cd ../dcn_v2
     python setup.py build_ext --inplace
 
     # If you want to use the uncertainty-driven PnP
@@ -72,12 +74,12 @@ Another way is to use the following commands.
     ```
 
 Download datasets which are formatted for this project:
-1. [linemod](https://zjueducn-my.sharepoint.com/:u:/g/personal/pengsida_zju_edu_cn/EXK2K0B-QrNPi8MYLDFHdB8BQm9cWTxRGV9dQgauczkVYQ?e=beftUz)
-2. [linemod_orig](https://zjueducn-my.sharepoint.com/:u:/g/personal/pengsida_zju_edu_cn/EaoGIPguY3FAgrFKKhi32fcB_nrMcNRm8jVCZQd7G_-Wbg?e=ig4aHk): The dataset includes the depth for each image.
-3. [occlusion linemod](https://zjueducn-my.sharepoint.com/:u:/g/personal/pengsida_zju_edu_cn/ESXrP0zskd5IvvuvG3TXD-4BMgbDrHZ_bevurBrAcKE5Dg?e=r0EgoA)
+1. [linemod](https://drive.google.com/drive/folders/1nxGbqO2AYnHekatPZLgdFNahNwSErSoq?usp=sharing)
+2. [linemod_orig](https://drive.google.com/drive/folders/1nxGbqO2AYnHekatPZLgdFNahNwSErSoq?usp=sharing): The dataset includes the depth for each image.
+3. [occlusion linemod](https://drive.google.com/drive/folders/1nxGbqO2AYnHekatPZLgdFNahNwSErSoq?usp=sharing)
 4. [truncation linemod](https://1drv.ms/u/s!AtZjYZ01QjphfuDICdni1IIM4SE): Check [TRUNCATION_LINEMOD.md](TRUNCATION_LINEMOD.md) for the information about the Truncation LINEMOD dataset.
-5. [Tless](https://zjueducn-my.sharepoint.com/:f:/g/personal/pengsida_zju_edu_cn/EsKEY3aHNElEjaKbhCJVyQgBUGTlprdcyF5sgLjEv8J8TQ?e=NbJpkM): `cat tlessa* | tar xvf - -C .`.
-6. [Tless cache data](https://zjueducn-my.sharepoint.com/:u:/g/personal/pengsida_zju_edu_cn/EWf-M5HRcH1JnBNN9yE1a84BYNAU7x1DoU_-W3Onl5Xxog?e=HZSrMu): It is used for training and testing on Tless.
+5. [Tless](https://drive.google.com/drive/folders/1nxGbqO2AYnHekatPZLgdFNahNwSErSoq?usp=sharing): `cat tlessa* | tar xvf - -C .`.
+6. [Tless cache data](https://drive.google.com/drive/folders/1nxGbqO2AYnHekatPZLgdFNahNwSErSoq?usp=sharing): It is used for training and testing on Tless.
 7. [SUN2012pascalformat](http://groups.csail.mit.edu/vision/SUN/releases/SUN2012pascalformat.tar.gz)
 
 ## Testing
@@ -112,7 +114,7 @@ Take the testing on `cat` as an example.
 
 ### Testing on Tless
 
-We provide the pretrained models of objects on Tless, which can be found at [here](https://zjueducn-my.sharepoint.com/:u:/g/personal/pengsida_zju_edu_cn/EbcvcBH-eFJDm7lFqillf_oB8Afr2d6vtELNn0tUUk439g?e=bNZaDc).
+We provide the pretrained models of objects on Tless, which can be found at [here](https://drive.google.com/drive/folders/1nxGbqO2AYnHekatPZLgdFNahNwSErSoq?usp=sharing).
 
 1. Download the pretrained models and put them to `$ROOT/data/model/pvnet/`.
 2. Test:
@@ -150,7 +152,7 @@ If setup correctly, the output will look like
 
 4. Visualize with a detector:
 
-   Download the pretrained models  [here](https://zjueducn-my.sharepoint.com/:u:/g/personal/haotongl_zju_edu_cn/EZxeOruBmGZLr8vldbB381ABo4cpI1VsE4HhqjizMw1Opw?e=OUGtql) and put them to `$ROOT/data/model/pvnet/pvnet_cat/59.pth` and `$ROOT/data/model/ct/ct_cat/9.pth`
+   Download the pretrained models [here](https://drive.google.com/drive/folders/1nxGbqO2AYnHekatPZLgdFNahNwSErSoq?usp=sharing) and put them to `$ROOT/data/model/pvnet/pvnet_cat/59.pth` and `$ROOT/data/model/ct/ct_cat/9.pth`
    
    ```
    python run.py --type detector_pvnet --cfg_file configs/ct_linemod.yaml
@@ -200,7 +202,7 @@ If setup correctly, the output will look like
 
 ## Training on the custom object
 
-An example dataset can be downloaded at [here](https://zjueducn-my.sharepoint.com/:u:/g/personal/pengsida_zju_edu_cn/Ec6Hd9j7z4lCiwDhqIwDcScBGPw2rsbn6FJh1C2FwbPJTw?e=xcKGAw).
+An example dataset can be downloaded at [here](https://drive.google.com/drive/folders/1nxGbqO2AYnHekatPZLgdFNahNwSErSoq?usp=sharing).
 
 1. Create a dataset using https://github.com/F2Wang/ObjectDatasetTools
 2. Organize the dataset as the following structure:
@@ -255,7 +257,7 @@ An example dataset can be downloaded at [here](https://zjueducn-my.sharepoint.co
     python run.py --type evaluate --cfg_file configs/custom.yaml
     ```
 
-An example dataset can be downloaded at [here](https://zjueducn-my.sharepoint.com/:u:/g/personal/pengsida_zju_edu_cn/Ec6Hd9j7z4lCiwDhqIwDcScBGPw2rsbn6FJh1C2FwbPJTw?e=xcKGAw).
+An example dataset can be downloaded at [here](https://drive.google.com/drive/folders/1nxGbqO2AYnHekatPZLgdFNahNwSErSoq?usp=sharing).
 
 ## Citation
 
