@@ -16,7 +16,7 @@ ffibuilder.set_source(
     #include "src/ext.h"
     """,
     extra_objects=['src/nearest_neighborhood.cu.o',
-                   os.path.join(os.environ.get('CUDA_HOME'),'lib64/libcudart.so')],
+                   os.path.join(os.environ.get('CUDA_HOME'),'lib/libcudart.so')],
     libraries=['stdc++']
 )
 
