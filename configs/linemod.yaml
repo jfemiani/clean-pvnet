@@ -2,7 +2,11 @@
 model: 'cat_v0'
 model_dir: 'data/model'
 network: 'res'
-heads: ''
+heads:
+  ct_hm: 30
+  seg_dim: 2
+  vote_dim: 18
+  wh: 2
 task: 'pvnet'
 gpus: (0, 1, 2, 3)
 resume: true

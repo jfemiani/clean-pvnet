@@ -68,11 +68,13 @@ class Resnet18(nn.Module):
         vertex = vertex.view(b, h, w, vn_2//2, 2)
         mask = torch.argmax(output['seg'], 1)
         if cfg.test.un_pnp:
-            mean = ransac_voting_layer_v3(mask, vertex, 512, inlier_thresh=0.99)
+            # mean = ransac_voting_layer_v3(mask, vertex, 512, inlier_thresh=0.99)
+            mean = ransac_voting_layer(mask, vertex, 512, inlier_thresh=0.99)
             kpt_2d, var = estimate_voting_distribution_with_mean(mask, vertex, mean)
             output.update({'mask': mask, 'kpt_2d': kpt_2d, 'var': var})
         else:
-            kpt_2d = ransac_voting_layer_v3(mask, vertex, 128, inlier_thresh=0.99, max_num=100)
+            # kpt_2d = ransac_voting_layer_v3(mask, vertex, 128, inlier_thresh=0.99, max_num=100)
+            kpt_2d = ransac_voting_layer(mask, vertex, 128, inlier_thresh=0.99, max_num=100)
             output.update({'mask': mask, 'kpt_2d': kpt_2d})
 
     def forward(self, x, feature_alignment=False):

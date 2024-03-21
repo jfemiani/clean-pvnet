@@ -31,7 +31,7 @@ def ransac_voting_layer(mask, vertex, round_hyp_num, inlier_thresh=0.999, confid
             selected_mask = (selection < (max_num / foreground_num.float()))
             cur_mask *= selected_mask
 
-        breakpoint()
+        # breakpoint()
         coords = torch.nonzero(cur_mask).float()  # [tn,2]
         coords = coords[:, [1, 0]]
         direct = vertex[bi].masked_select(torch.unsqueeze(torch.unsqueeze(cur_mask>0, 2), 3))  # [tn,vn,2]
